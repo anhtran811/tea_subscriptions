@@ -16,6 +16,7 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
       headers = { "CONTENT_TYPE": "application/json"}
 
       expect(Subscription.count).to eq(0)
+      expect(customer.subscriptions.count).to eq(0)
 
       post "/api/v1/customers/#{customer.id}/teas/#{tea.id}/subscriptions", headers: headers, params: JSON.generate(subscription: subscription_params)
       tea_subscription_response = JSON.parse(response.body, symbolize_names: true)
@@ -23,6 +24,7 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
       expect(response).to be_successful
       expect(response.status).to eq(201)
       expect(Subscription.count).to eq(1)
+      expect(customer.subscriptions.count).to eq(1)
 
       expect(tea_subscription_response).to have_key(:data)
 
