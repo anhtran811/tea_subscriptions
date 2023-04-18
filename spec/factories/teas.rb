@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :subscription do
+  factory :tea do
     name {Faker::Tea.variety}
     type {Faker::Tea.type}
     description {Faker::Coffee.notes}
