@@ -1,7 +1,6 @@
 class Subscription < ApplicationRecord
   belongs_to :customer
-  has_many :tea_subscriptions, dependent: :destroy
-  has_many :teas, through: :tea_subscriptions, dependent: :destroy
+  belongs_to :tea
 
   validates_presence_of :name, :price, :status, :frequency
 
