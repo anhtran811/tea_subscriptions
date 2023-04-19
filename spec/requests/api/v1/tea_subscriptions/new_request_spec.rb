@@ -57,5 +57,124 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
       expect(response_data).to have_key(:tea_id)
       expect(response_data[:tea_id]).to be_an(Integer)
     end
+
+    context 'if the customer does not exist' do
+      it 'will return an error message' do
+        customer = create(:customer)
+        tea = create(:tea)
+
+        subscription_params = { name: "Detox tea",
+                                price: 10.99,
+                                status: "active",
+                                frequency: "biweekly",
+                                customer_id: Customer.last.id+1,
+                                tea_id: tea.id
+                              }
+                              
+        headers = { "CONTENT_TYPE": "application/json"}
+
+        expect(Subscription.count).to eq(0)
+        expect(customer.subscriptions.count).to eq(0)
+
+        post "/api/v1/customers/#{Customer.last.id+1}/teas/#{tea.id}/subscriptions", headers: headers, params: JSON.generate(subscription: subscription_params)
+        tea_subscription_response = JSON.parse(response.body, symbolize_names: true)
+ 
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+        expect(Subscription.count).to eq(0)
+        expect(customer.subscriptions.count).to eq(0)
+
+        expect(tea_subscription_response).to have_key(:error)
+        expect(tea_subscription_response[:error]).to be_an(Array)
+
+        expect(tea_subscription_response[:error][0]).to have_key(:title)
+        expect(tea_subscription_response[:error][0][:title]).to be_a(String)
+
+        expect(tea_subscription_response[:error][0]).to have_key(:status)
+        expect(tea_subscription_response[:error][0][:status]).to be_a(String)
+      end
+    end
+
+    context 'if the item does not exist' do
+      it 'will return an error message' do
+        customer = create(:customer)
+        tea = create(:tea)
+
+        subscription_params = { name: "Detox tea",
+                                price: 10.99,
+                                status: "active",
+                                frequency: "biweekly",
+                                customer_id: customer.id,
+                                tea_id: Tea.last.id+1
+                              }
+                              
+        headers = { "CONTENT_TYPE": "application/json"}
+
+        expect(Subscription.count).to eq(0)
+        expect(customer.subscriptions.count).to eq(0)
+
+        post "/api/v1/customers/#{customer.id}/teas/#{Tea.last.id+1}/subscriptions", headers: headers, params: JSON.generate(subscription: subscription_params)
+        tea_subscription_response = JSON.parse(response.body, symbolize_names: true)
+ 
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+        expect(Subscription.count).to eq(0)
+        expect(customer.subscriptions.count).to eq(0)
+
+        expect(tea_subscription_response).to have_key(:error)
+        expect(tea_subscription_response[:error]).to be_an(Array)
+
+        expect(tea_subscription_response[:error][0]).to have_key(:title)
+        expect(tea_subscription_response[:error][0][:title]).to be_a(String)
+
+        expect(tea_subscription_response[:error][0]).to have_key(:status)
+        expect(tea_subscription_response[:error][0][:status]).to be_a(String)
+      end
+    end
+  end
+
+  describe 'PATCH /customers/:customer_id/teas/:tea_id/subscriptions/:subscription_id' do
+    context 'if the customer updates their tea subscription' do
+      it 'will change the status of their tea subscription' do
+        customer = create(:customer)
+        tea = create(:tea)
+        subscription = create(:subscription, customer_id: customer.id, tea_id: tea.id, status: 0)
+
+        old_subscription_status = Subscription.last.status
+
+        subscription_params = { status: 1 }
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch "/api/v1/customers/#{customer.id}/teas/#{tea.id}/subscriptions/#{subscription.id}", headers: headers, params: JSON.generate({subscription: subscription_params}) 
+        response_body = JSON.parse(response.body, symbolize_names: true)
+
+        new_subscription = Subscription.find_by(id: subscription.id)
+        expect(response).to be_successful
+        expect(new_subscription.status).to eq("cancelled")
+        expect(new_subscription.status).to_not eq("active")
+      end
+    end
+    
+    context 'if the customer does not exist' do
+      it 'will return an error message' do
+        customer = create(:customer)
+        tea = create(:tea)
+        subscription = create(:subscription, customer_id: customer.id, tea_id: tea.id, status: 0)
+
+        old_subscription_status = Subscription.last.status
+
+        subscription_params = { status: 1 }
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch "/api/v1/customers/#{Customer.last.id+1}/teas/#{tea.id}/subscriptions/#{subscription.id}", headers: headers, params: JSON.generate({subscription: subscription_params}) 
+        response_body = JSON.parse(response.body, symbolize_names: true)
+      
+        new_subscription = Subscription.find_by(id: subscription.id)
+        expect(response).to_not be_successful
+        expect(response.status).to eq(404)
+        expect(new_subscription.status).to_not eq("cancelled")
+        expect(new_subscription.status).to eq("active")
+      end
+    end
   end
 end
