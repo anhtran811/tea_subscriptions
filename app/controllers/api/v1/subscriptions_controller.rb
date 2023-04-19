@@ -14,7 +14,7 @@ class Api::V1::SubscriptionsController < ApplicationController
   private
 
   def subscription_params
-    params.require(:subscription).permit(:name, :price, :status, :frequency, :customer_id, :tea_id)
+    params.require(:subscription).permit(:name, :price, :status, :frequency, :customer_id, :tea_id).merge(customer_id: params[:customer_id], tea_id: params[:tea_id])
   end
 
   def update_params
