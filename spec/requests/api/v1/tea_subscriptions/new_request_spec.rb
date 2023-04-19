@@ -6,13 +6,13 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
       customer = create(:customer)
       tea = create(:tea)
 
-      subscription_params = { name: "Detox tea",
+      subscription_params = { 
+                              name: "Detox tea",
                               price: 10.99,
                               status: "active",
-                              frequency: "biweekly",
-                              customer_id: customer.id,
-                              tea_id: tea.id
+                              frequency: "biweekly"
                             }
+
       headers = { "CONTENT_TYPE": "application/json"}
 
       expect(Subscription.count).to eq(0)
@@ -63,12 +63,11 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
         customer = create(:customer)
         tea = create(:tea)
 
-        subscription_params = { name: "Detox tea",
+        subscription_params = { 
+                                name: "Detox tea",
                                 price: 10.99,
                                 status: "active",
-                                frequency: "biweekly",
-                                customer_id: Customer.last.id+1,
-                                tea_id: tea.id
+                                frequency: "biweekly"
                               }
                               
         headers = { "CONTENT_TYPE": "application/json"}
@@ -100,12 +99,11 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
         customer = create(:customer)
         tea = create(:tea)
 
-        subscription_params = { name: "Detox tea",
+        subscription_params = { 
+                                name: "Detox tea",
                                 price: 10.99,
                                 status: "active",
-                                frequency: "biweekly",
-                                customer_id: customer.id,
-                                tea_id: Tea.last.id+1
+                                frequency: "biweekly"
                               }
                               
         headers = { "CONTENT_TYPE": "application/json"}
