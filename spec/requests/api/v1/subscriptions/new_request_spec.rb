@@ -88,6 +88,8 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
 
         expect(tea_subscription_response[:error][0]).to have_key(:title)
         expect(tea_subscription_response[:error][0][:title]).to be_a(String)
+        expect(tea_subscription_response[:error][0][:title]).to match(/Validation failed: Customer must exist/)
+
 
         expect(tea_subscription_response[:error][0]).to have_key(:status)
         expect(tea_subscription_response[:error][0][:status]).to be_a(String)
@@ -124,6 +126,7 @@ describe 'POST /customers/:customer_id/teas/:tea_id/' do
 
         expect(tea_subscription_response[:error][0]).to have_key(:title)
         expect(tea_subscription_response[:error][0][:title]).to be_a(String)
+        expect(tea_subscription_response[:error][0][:title]).to match(/Validation failed: Tea must exist/)
 
         expect(tea_subscription_response[:error][0]).to have_key(:status)
         expect(tea_subscription_response[:error][0][:status]).to be_a(String)

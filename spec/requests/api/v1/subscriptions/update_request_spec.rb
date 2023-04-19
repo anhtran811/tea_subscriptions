@@ -37,10 +37,22 @@ describe 'PATCH /customers/:customer_id/teas/:tea_id/subscriptions/:subscription
       response_body = JSON.parse(response.body, symbolize_names: true)
     
       new_subscription = Subscription.find_by(id: subscription.id)
-      expect(response).to_not be_successful
-      expect(response.status).to eq(404)
+
       expect(new_subscription.status).to_not eq("cancelled")
       expect(new_subscription.status).to eq("active")
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      expect(response_body).to have_key(:error)
+      expect(response_body[:error]).to be_an(Array)
+
+      expect(response_body[:error][0]).to have_key(:title)
+      expect(response_body[:error][0][:title]).to be_a(String)
+      expect(response_body[:error][0][:title]).to match(/Couldn't find Customer with 'id'=#{Customer.last.id+1}/)
+
+      expect(response_body[:error][0]).to have_key(:status)
+      expect(response_body[:error][0][:status]).to be_a(String)
     end
   end
 end
