@@ -1,24 +1,195 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+<div id="header" align="center">
+<img src="src/assets/tea.png" alt="tea subscriptions" width="200" height="auto" />
+</div>
 
-Things you may want to cover:
+# <p align="center"> Tea Subscriptions </p>
 
-* Ruby version
+*Text*
+## About Tea Subscriptions
 
-* System dependencies
+*Text*
 
-* Configuration
 
-* Database creation
+## RESTful Endpoints
 
-* Database initialization
+<details close>
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+### Get a Customer's Subscriptions
 
-* Deployment instructions
+```http
+GET /api/v1/customers/:customer_id/subscriptions
+```
 
-* ...
+<details close>
+<summary>  Details </summary>
+<br>
+    
+Parameters: <br>
+```
+No Parameters
+```
+
+| Code | Description |
+| :--- | :--- |
+| 200 | `OK` |
+
+Example Value:
+
+```json
+{
+    "data": [
+        {
+            "id": "1",
+            "type": "subscription",
+            "attributes": {
+                "name": "Detox tea",
+                "price": 10.99,
+                "status": "cancelled",
+                "frequency": "biweekly",
+                "customer_id": 1,
+                "tea_id": 1
+            }
+        },
+        {
+            "id": "2",
+            "type": "subscription",
+            "attributes": {
+                "name": "Weight lost",
+                "price": 10.99,
+                "status": "active",
+                "frequency": "biweekly",
+                "customer_id": 1,
+                "tea_id": 2
+            }
+        },
+        {
+            "id": "3",
+            "type": "subscription",
+            "attributes": {
+                "name": "Clear up",
+                "price": 8.99,
+                "status": "cancelled",
+                "frequency": "monthly",
+                "customer_id": 1,
+                "tea_id": 3
+            }
+        }
+    ]
+}
+```
+
+</details>
+
+---
+
+### Create a Subscription
+
+```http
+POST /api/v1/customers/:customer_id/teas/:tea_id/subscriptions
+```
+
+<details close>
+<summary>  Details </summary>
+<br>
+    
+Parameters: <br>
+```
+CONTENT_TYPE=application/json
+```
+
+| Code | Description |
+| :--- | :--- |
+| 201 | CREATED |
+
+Example Value:
+
+```json
+{
+    "data": {
+        "id": "1",
+        "type": "subscription",
+        "attributes": {
+            "name": "Detox tea",
+            "price": 10.99,
+            "status": "active",
+            "frequency": "biweekly",
+            "customer_id": 1,
+            "tea_id": 1
+        }
+    }
+}
+```
+</details>
+
+---
+
+### Update a Subscription
+
+```http
+POST /api/v1/customers/:customer_id/teas/:tea_id/subscriptions/:subcription_id
+```
+
+<details close>
+<summary>  Details </summary>
+<br>
+    
+Parameters: <br>
+```
+CONTENT_TYPE=application/json
+```
+
+| Code | Description |
+| :--- | :--- |
+| 200 | OK |
+
+Example Value:
+
+```json
+{
+    "data": {
+        "id": "1",
+        "type": "subscription",
+        "attributes": {
+            "name": "Detox tea",
+            "price": 10.99,
+            "status": "cancelled",
+            "frequency": "biweekly",
+            "customer_id": 1,
+            "tea_id": 1
+        }
+    }
+}
+```
+</details>
+</details>
+
+## Status Codes
+
+Tea Subscriptions returns the following status codes in its API:
+
+| Status Code | Description |
+| :--- | :--- |
+| 200 | `OK` |
+| 201 | `CREATED` |
+| 400 | `BAD REQUEST` |
+| 404 | `NOT FOUND` |
+| 500 | `INTERNAL SERVER ERROR` |
+
+## Prerequisites
+Running this project requires:
+- Rails 7.0.4.3
+- Ruby 2.7.2
+## Installation
+
+1. Fork and clone this repository
+2. `cd` into the root directiory
+3. `bundle install`
+4. `rails db:{drop,create,migrate}`
+5. Run the test suite with `bundle exec rspec`
+6. Start the local server by running `rails s`
+7. Visit the app on `localhost:3000` in your web browser
+
+## Database Schema
+<img src="src/assets/schema.png" alt="schema" width="1000" height="auto" />
