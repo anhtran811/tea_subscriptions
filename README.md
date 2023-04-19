@@ -3,13 +3,9 @@
 <img src="src/assets/tea.png" alt="tea subscriptions" width="200" height="auto" />
 </div>
 
-# <p align="center"> Tea Subscriptions </p>
+# <p align="center"> :tea:Tea Subscriptions:tea: </p>
 
-*Text*
-## About Tea Subscriptions
-
-*Text*
-
+This application is an API that exposes endpoints for a customer to create a subscription to tea. The customer can also update the status of their tea subscription and view all of their subscriptions. 
 
 ## RESTful Endpoints
 
@@ -181,6 +177,8 @@ Tea Subscriptions returns the following status codes in its API:
 Running this project requires:
 - Rails 7.0.4.3
 - Ruby 2.7.2
+- Gems: jsonapi-serializer | factory_bot_rails | faker | shoulda-matchers
+
 ## Installation
 
 1. Fork and clone this repository
